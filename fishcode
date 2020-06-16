@@ -84,16 +84,18 @@ if __name__ == '__main__':
     else:
         print("Connection is not established")
     p.join()
-
+    print("\n**********  Configuration done ***********\n")
     p0 = Process(target = main_control_center.configure_threshold, args=(sensor_conn,))
     p0.start()
     threshold = main_conn.recv()
     print("Threshold value = ",threshold)
     p0.join()
-
+    print("\n********** Threshold value is set **********\n")
     p1 = Process(target=sensor_module.raise_alarm, args=(sensor_conn, waterlevel, threshold))
     p1.start()
     alarm = main_conn.recv()
+    print("From Raise alarm we get alarm value as : ", alarm)
+    print("\n*********************\n")
     if (alarm == 1):
         print("Raise Alarm : High alarm raised")
         alarm_type = 'high'
@@ -104,38 +106,51 @@ if __name__ == '__main__':
         print("Error has occured")
     p1.join()
 
+    print("\n********** Alarm is Raised **********\n")
     p2 = Process(target= sensor_module.update_status, args=(sensor_conn, alarm_type))
     p2.start()
     status = main_conn.recv()
+    print("From Update status we get status value as : ", status)
+    print("\n*********************\n")
     if (status == 'high'):
         print("Update Status: Status of all sensors updated to high.")
     elif (status == 'low'):
         print("Update Status: Status of all sensors updated to low.")
     p2.join()
+    print("\n********** Status of sensors updated **********\n")
 
     p3 = Process(target=main_control_center.receive_status, args=(sensor_conn, status))
     p3.start()
     value = main_conn.recv()
+    print("From Receive status the value to be sent to main control centre is : ",value)
+    print("\n*********************\n")
     if (value == 1):
         print("Receive Status: High status of all sensors received by main control centre.")
     elif (value == 0):
         print("Receive Status: Low status of all sensors received by main control centre.")
     p3.join()
+    print("\n********** Status of sensors received by main control centre **********\n")
 
     p4= Process(target= main_control_center.send_instruction, args=(sensor_conn, value))
     p4.start()
     instruction = main_conn.recv()
+    print("From Send instruction the instruction sent is : ",instruction)
+    print("\n*********************\n")
     if(instruction == 'raise net'):
         print("Send Instruction: Net should be raised.")
     elif(instruction == 'lower net'):
         print("Send Instruction: Net should be lowered.")
     p4.join()
+    print("\n********** Instruction is sent by main control centre **********\n")
 
     p5 = Process(target = sensor_module.control_net, args= (sensor_conn, instruction))
     p5.start()
     control= main_conn.recv()
+    print ("From Control net, the control value sent is : ",control)
+    print("\n*********************\n")
     if (control == 1):
         print("Control Net: Instruction received and net is raised.")
     elif (control == 0):
         print("Control Net: Instruction received and net is lowered.")
     p5.join()
+   
