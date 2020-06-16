@@ -13,8 +13,12 @@ class sensor_module:
     def raise_alarm(conn, waterlevel, threshold):
         if (waterlevel > threshold):
             conn.send(1)
+        elif(waterlevel<0)
+            conn.send(-1)
         elif (waterlevel <= threshold):
+
             conn.send(0)
+            
         conn.close()
 
     def update_status(conn, alarm_type):
@@ -104,6 +108,7 @@ if __name__ == '__main__':
         alarm_type = 'low'
     else:
         print("Error has occured")
+        exit(0)
     p1.join()
 
     print("\n********** Alarm is Raised **********\n")
