@@ -59,5 +59,6 @@ if __name__=='__main__':
             writer.writeheader()
             writer.writerow({'mac_address': mac[int(num)-1],'water_level': waterlevel})
         alarm = sens_obj.raise_alarm(num,waterlevel,threshold)
+        sens_obj.update_status('low')
         if alarm == '1':
             sens_obj.update_status('high')
