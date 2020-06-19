@@ -52,6 +52,7 @@ if __name__=='__main__':
         sens_obj.control_net(instruct.read())
         instruct.close()
         os.remove("instruction.txt")
+
     except:
         num = input("Enter sensor id:")
         threshold = mcc_object.configure_threshold()
