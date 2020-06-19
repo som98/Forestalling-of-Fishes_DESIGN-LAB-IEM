@@ -3,6 +3,7 @@ import csv
 from mcc import *
 import numpy as np
 class sensor_manager:
+
     def __init__(self):
         self.id=None
 
@@ -14,8 +15,6 @@ class sensor_manager:
         self.lookupTable.append('00:0a:95:9d:68:17')
 
     def raise_alarm(self, id, waterlevel, threshold):
-        filename = "alarm_"+id +".txt"
-        alarm1 = open(filename, "w")
         alarm =''
         if (waterlevel > threshold):
             alarm='1'
@@ -23,7 +22,6 @@ class sensor_manager:
             alarm="error"
         elif (waterlevel <= threshold):
             alarm ='0'
-        alarm1.write(alarm)
         return alarm
 
     def update_status(self, status):
@@ -62,3 +60,4 @@ if __name__=='__main__':
         sens_obj.update_status('low')
         if alarm == '1':
             sens_obj.update_status('high')
+        print("**** Status file updated ****")
