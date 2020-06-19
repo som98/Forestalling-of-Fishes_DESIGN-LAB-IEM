@@ -25,9 +25,19 @@ class sensor_manager:
         return alarm
 
     def update_status(self, status):
-        stat= open("status.txt",'w')
-        stat.write(status)
-        return "Status written in file as "+status
+        try:
+            stat=open("status.txt",'r').read()
+            if stat=='high':
+                return "Status written in file as "+status
+            elif stat=='low':
+                stat.write(status)
+                return "Status written in file as " + status
+
+        except:
+
+            stat= open("status.txt",'w')
+            stat.write(status)
+            return "Status written in file as "+status
 
     def control_net(self, instruction):
         action=""
@@ -57,7 +67,9 @@ if __name__=='__main__':
             writer.writeheader()
             writer.writerow({'mac_address': mac[int(num)-1],'water_level': waterlevel})
         alarm = sens_obj.raise_alarm(num,waterlevel,threshold)
-        sens_obj.update_status('low')
+
         if alarm == '1':
             sens_obj.update_status('high')
+        elif alarm =='0' or alarm =='error':
+            sens_obj.update_status('low')
         print("**** Status file updated ****")
