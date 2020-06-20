@@ -49,6 +49,7 @@ if __name__=='__main__':
                 print("Connection to sensor" + str(i) + " established")
             else:
                 print("Connection to sensor" + str(i) + " not established")
+                continue
 
             stat = open("status_"+str(i)+".txt", "r").read()
             if(stat=='high'):
